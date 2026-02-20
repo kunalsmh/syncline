@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Clipboard</title>
+    <style>
+        :root {
+            --glass-bg: rgba(20, 20, 20, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --item-bg: rgba(255, 255, 255, 0.05);
+            --item-hover: rgba(255, 255, 255, 0.12);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.5);
+            --accent: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            color: var(--text-primary);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border-radius: 12px;
+            background: transparent;
+        }
+
+        /* The Liquid Glass Container */
+        .glass-container {
+            flex-grow: 1;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        header {
+            padding: 16px 16px 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .header-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+        }
+
+        .dot-pulse {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            }
+        }
+
+        #clipboard-section {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .clipboard-item {
+            background: var(--item-bg);
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            white-space: pre-wrap;
+            word-break: break-all;
+            border: 1px solid var(--glass-border);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .clipboard-item:hover {
+            background: var(--item-hover);
+            transform: translateY(-1px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .clipboard-item:active {
+            transform: scale(0.98);
+        }
+
+        /* Fade in effect for new items */
+        .clipboard-item {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #clipboard-list:empty::after {
+            content: "Waiting for copies...";
+            display: block;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            padding-top: 40px;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="glass-container">
+        <header>
+            <div class="header-title">Universal Clipboard</div>
+        </header>
+        <div id="clipboard-section">
+            <div id="clipboard-list"></div>
+        </div>
+    </div>
+    <script src="./renderer.js"></script>
+</body>
+
+</html>
